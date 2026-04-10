@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Bill for Booking {{ booking.id }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white p-8 rounded-lg shadow-md">
+        <div class="border-b pb-4 mb-6">
+            <h2 class="text-2xl font-bold text-slate-800">Bill Slip</h2>
+            <p class="text-slate-500">Booking #{{ booking.id }}</p>
+        </div>
+        
+        <div class="space-y-4 text-slate-700">
+            <p><strong class="font-medium text-slate-600 w-32 inline-block">User:</strong> {{ booking.user.username }}</p>
+            <p><strong class="font-medium text-slate-600 w-32 inline-block">Parking Spot:</strong> {{ booking.spot.spot_number }} ({{ booking.spot.spot_type }})</p>
+            <p><strong class="font-medium text-slate-600 w-32 inline-block">Hourly Rate:</strong> ₹{{ "%.2f"|format(booking.spot.hourly_rate) }}</p>
+            <hr class="my-4">
+            <p><strong class="font-medium text-slate-600 w-32 inline-block">Check-in:</strong> {{ booking.start_time.strftime('%Y-%m-%d %H:%M') }}</p>
+            <p><strong class="font-medium text-slate-600 w-32 inline-block">Check-out:</strong> {{ booking.end_time.strftime('%Y-%m-%d %H:%M') }}</p>
+            <p><strong class="font-medium text-slate-600 w-32 inline-block">Duration:</strong> {{ "%.2f"|format(booking.duration_hours) }} hours</p>
+        </div>
+
+        <div class="mt-6 border-t pt-4">
+            <div class="flex justify-between items-center">
+                <span class="text-xl font-bold text-slate-800">Total Amount:</span>
+                <span class="text-2xl font-bold text-slate-900">₹{{ "%.2f"|format(booking.total_cost) }}</span>
+            </div>
+            <div class="flex justify-between items-center mt-2">
+                <span class="text-lg font-medium text-slate-600">Status:</span>
+                <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full 
+                {% if booking.status == 'Paid' %} bg-green-100 text-green-800 
+                {% elif booking.status == 'Completed' %} bg-blue-100 text-blue-800
+                {% else %} bg-gray-100 text-gray-800 {% endif %}">
+                    {{ booking.status }}
+                </span>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            {% if booking.status == 'Completed' %}
+                <p class="text-slate-600 mb-4">Your payment is due.</p>
+                <a href="{{ url_for('process_payment', booking_id=booking.id) }}" class="w-full sm:w-auto inline-block text-center py-3 px-6 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-green-600 hover:bg-green-700">
+                    Simulate Paying ₹{{ "%.2f"|format(booking.total_cost) }} Now
+                </a>
+            {% elif booking.status == 'Paid' %}
+                <p class="text-green-600 font-semibold">This bill has been paid. Thank you!</p>
+            {% endif %}
+            <div class="mt-6">
+                <a href="{{ url_for('my_bookings') }}" class="text-sm text-blue-600 hover:text-blue-800">← Back to My Bookings</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

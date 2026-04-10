@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Spot {{ spot.spot_number }}{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto">
+    <div class="bg-white p-8 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-slate-800 mb-4">Book Parking Spot: <span class="text-blue-600">{{ spot.spot_number }}</span></h2>
+        
+        <div class="mb-6 p-4 bg-slate-50 rounded-md border border-slate-200">
+            <p class="text-lg"><strong class="font-medium text-slate-600">Type:</strong> {{ spot.spot_type }}</p>
+            <p class="text-lg"><strong class="font-medium text-slate-600">Rate:</strong> ₹{{ "%.2f"|format(spot.hourly_rate) }}/hr</p>
+        </div>
+
+        <form method="post" class="space-y-6">
+            <div>
+                <label for="start_time" class="block text-sm font-medium text-slate-700">Start Time</label>
+                <div class="mt-1">
+                    <input id="start_time" name="start_time" type="datetime-local" required class="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+            </div>
+            
+            <div>
+                <label for="end_time" class="block text-sm font-medium text-slate-700">End Time</label>
+                <div class="mt-1">
+                    <input id="end_time" name="end_time" type="datetime-local" required class="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Confirm Booking
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

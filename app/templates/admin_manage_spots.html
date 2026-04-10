@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Parking Spots{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-slate-800">Manage Parking Spots</h2>
+        <a href="{{ url_for('admin_add_spot') }}" class="inline-block bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">Add New Spot</a>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Spot Number</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Type</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Hourly Rate</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Is Available</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-slate-200">
+                {% for spot in spots %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{ spot.spot_number }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ spot.spot_type }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">₹{{ "%.2f"|format(spot.hourly_rate) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ 'bg-green-100 text-green-800' if spot.is_available else 'bg-red-100 text-red-800' }}">
+                                {{ 'Yes' if spot.is_available else 'No' }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-4">
+                            <a href="{{ url_for('admin_edit_spot', spot_id=spot.id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                            <form action="{{ url_for('admin_delete_spot', spot_id=spot.id) }}" method="post" class="inline">
+                                <button type="submit" onclick="return confirm('Are you sure you want to delete this spot?');" class="text-red-600 hover:text-red-900">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
