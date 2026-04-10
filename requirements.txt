@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 pandas
 numpy
 python-dotenv
+psycopg2-binary
